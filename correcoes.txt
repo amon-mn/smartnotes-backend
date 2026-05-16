@@ -1,0 +1,37 @@
+NOTA: 9.3
+
+COMENTÁRIOS:
+**Regra 1 - Tecnologias:**
+Todas as tecnologias obrigatórias foram usadas durante a implementação.
+
+**Regra 2 - Modelos Prisma:**
+Os modelos do Prisma foram implementados corretamente.
+
+**Regra 3 - Endpoints:**
+Todas as rotas da API foram implementadas.
+
+**Regra 4 - Validação de senha (Joi):**
+As senhas dos usuários seguem todos os critérios pedidos no documento de especificação.
+
+**Regra 5 - Requisitos de segurança:**
+- Gerenciamento de segredos: Parcialmente atendido. As variáveis `SESSION_SECRET` e `FRONTEND_URL` possuem fallback hardcoded no código (`'uma-senha-muito-louca'` e `'http://localhost:3001'`), o que viola a regra de não ter dados sigilosos no código-fonte.
+- Hash de senha: Implementado corretamente com bcryptjs.
+- Sessão segura: Configurada corretamente (`httpOnly: true`, `sameSite: 'lax'`, `saveUninitialized: false`).
+- Autorização IDOR: Implementada corretamente, retornando 404 quando a nota não pertence ao usuário.
+- Rate limiting: Apenas o limite global (100 req/15min) foi implementado. **Falta o rate limit específico de 10 req/15min nos endpoints de autenticação**.
+- CORS: Configurado corretamente com origem via variável de ambiente e `credentials: true`.
+- Helmet: Aplicado com configurações padrão, que já cobrem os requisitos mínimos.
+- Timing attack: Implementado corretamente com `FAKE_HASH` no login.
+
+**Cálculo da nota (item 6):**
+- Endpoints funcionando (30%): 30 (todas as rotas implementadas)
+- Validações Joi (10%): 10
+- Autenticação por sessão (15%): 15
+- Autorização IDOR (15%): 15
+- Rate limiting (5%): 2.5 (apenas global implementado, falta o de auth)
+- CORS (5%): 5
+- Hash de senha e segredos em env (10%): 5 (hash ok, mas há fallbacks hardcoded para segredos)
+- Timing attack (5%): 5
+- Helmet (5%): 5
+
+Total: 9.3, com ajustes pelos pontos críticos de segurança (fallback de SESSION_SECRET é uma falha relevante).
